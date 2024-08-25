@@ -1,0 +1,214 @@
+﻿@model IndexViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Qr Kod yarat";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --container-bg-color: #fff;
+            --input-bg-color: #fff;
+            --input-border-color: #ccc;
+            --btn-primary-bg: #007bff;
+            --btn-success-bg: #28a745;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #181818;
+            --text-color: #f4f4f4;
+            --container-bg-color: #282c35;
+            --input-bg-color: #333;
+            --input-border-color: #555;
+            --btn-primary-bg: #007bff;
+            --btn-success-bg: #28a745;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--container-bg-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container {
+            flex: 1;
+            min-width: 300px;
+            margin-right: 20px;
+        }
+
+        .qr-container {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+            margin-left: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            background-color: var(--input-bg-color);
+            border: 1px solid var(--input-border-color);
+            border-radius: 4px;
+            color: var(--text-color);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            color: white;
+            background-color: var(--btn-primary-bg);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-success {
+            background-color: var(--btn-success-bg);
+        }
+
+        .qr-code-img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .brand-text {
+            font-family: 'Georgia', serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-top: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--container-bg-color);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</div>
+    <div >
+        <div style="width100%;">
+            <a style="margin-left:45%" target="_blank" href="https://www.linkedin.com/in/ceyhun-a%C4%9Fayev-7169502b9/overlay/about-this-profile/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BVlhaHPM%2FRDKp8ncskqQhfA%3D%3D"
+               class="brand-text">By Ceyhun Aghayev</a>
+        </div>
+        <div class ="container">
+        <div class="form-container">
+            <h2>@ViewData["Title"]</h2>
+            <form asp-action="Index" method="post">
+                <div class="form-group">
+                    <label asp-for="Details.FirstName">First Name</label>
+                    <input asp-for="Details.FirstName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Details.LastName">Last Name</label>
+                    <input asp-for="Details.LastName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Details.PhoneNumber">Phone Number</label>
+                    <input asp-for="Details.PhoneNumber" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Details.Email">Email</label>
+                    <input asp-for="Details.Email" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Details.Company">Company</label>
+                    <input asp-for="Details.Company" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Details.Job">Job</label>
+                    <input asp-for="Details.Job" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Details.Country">Country</label>
+                    <input asp-for="Details.Country" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Details.City">City</label>
+                    <input asp-for="Details.City" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Details.ZIP">ZIP Code</label>
+                    <input asp-for="Details.ZIP" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Details.Fax">Fax</label>
+                    <input asp-for="Details.Fax" class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-primary">Generate QR Code</button>
+            </form>
+        </div>
+        <div class="qr-container">
+            @if (Model != null && Model.QrCode != null)
+            {
+                <div class="qr-code-container">
+                    <h3>QR Kod:</h3>
+                    <img src="data:image/png;base64,@Model.QrCode" alt="QR Code" class="qr-code-img" />
+                    <a href="data:image/png;base64,@Model.QrCode" download="QRCode.png" class="btn btn-success">Download QR Code</a>
+                    <br />
+                    <br />
+                </div>
+            }
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleDarkMode() {
+            var currentTheme = document.documentElement.getAttribute("data-theme");
+            var newTheme = currentTheme === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", newTheme);
+            // Save the theme preference in localStorage
+            localStorage.setItem("theme", newTheme);
+        }
+
+        // Set the initial theme based on saved preference or system setting
+        document.addEventListener("DOMContentLoaded", function () {
+            var savedTheme = localStorage.getItem("theme");
+            if (savedTheme) {
+                document.documentElement.setAttribute("data-theme", savedTheme);
+            } else {
+                // Optionally, you can set it to follow system preferences
+                var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute("data-theme", prefersDark ? "dark" : "light");
+            }
+        });
+    </script>
+</body>
+</html>
